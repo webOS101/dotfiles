@@ -27,12 +27,20 @@ syntax enable
 colorscheme desert
 
 set nobackup
+set noswapfile
 
 set noexpandtab
 set shiftwidth=4
 set tabstop=4
 
 set hidden
+
+" When you forgot to sudo before editing
+cmap w!! w !sudo tee % >/dev/null
+
+" Quickly edit/reload the vimrc file
+nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
