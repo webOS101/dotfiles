@@ -35,6 +35,27 @@ set tabstop=4
 
 set hidden
 
+"====[ Use persistent undo ]=================
+
+if has('persistent_undo')
+    " Save all undo files in a single location (less messy, more risky)...
+    set undodir=$HOME/.vim/.vimundo
+
+    " Save a lot of back-history...
+    set undolevels=5000
+
+    " Actually switch on persistent undo
+    set undofile
+
+endif
+
+" Make BS/DEL work as expected in visual modes (i.e. delete the selected text)...
+vmap <BS> x
+
+" Faster search/replace
+nmap S :%s//g<LEFT><LEFT>
+vmap S :s//g<LEFT><LEFT>
+
 " When you forgot to sudo before editing
 cmap w!! w !sudo tee % >/dev/null
 
@@ -72,3 +93,21 @@ function! VisualSelection(direction) range
     let @/ = l:pattern
     let @" = l:saved_reg
 endfunction
+
+vmap <expr> > ShiftAndKeepVisualSelection(">")
+vmap <expr> < ShiftAndKeepVisualSelection("<")
+
+function! ShiftAndKeepVisualSelection(cmd, mode)
+	set nosmartindent
+	if mode() =~ '[Vv]'
+		return a:cmd . ":set smartindent\<CR>gv"
+	else
+		return a:cmd . ":set smartindent\<CR>"
+	endif
+endfunction
+
+"====[ Goto last location in non-empty files ]=======
+
+autocmd BufReadPost *  if line("'\"") > 1 && line("'\"") <= line("$")
+                   \|     exe "normal! g`\""
+                   \|  endif
