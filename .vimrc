@@ -97,7 +97,7 @@ endfunction
 vmap <expr> > ShiftAndKeepVisualSelection(">")
 vmap <expr> < ShiftAndKeepVisualSelection("<")
 
-function! ShiftAndKeepVisualSelection(cmd, mode)
+function! ShiftAndKeepVisualSelection(cmd)
 	set nosmartindent
 	if mode() =~ '[Vv]'
 		return a:cmd . ":set smartindent\<CR>gv"
