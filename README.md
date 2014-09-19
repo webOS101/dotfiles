@@ -10,4 +10,4 @@ There is a set of VIM plugins available here: https://github.com/webOS101/vimplu
 Basically:
 
     sh .osx
-    cp .bash_profile .gvimrc .inputrc .vimrc ~
+    cp .bash_profile .gvimrc .inputrc .vimrc .git-prompt.sh ~
