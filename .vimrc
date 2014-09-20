@@ -1,6 +1,8 @@
 let mapleader = ","
 execute pathogen#infect()
 
+" ====== Default settings ======
+
 set encoding=utf-8 nobomb
 set list
 set listchars=tab:\|\ ,eol:¬,trail:·
@@ -18,7 +20,6 @@ set smartcase
 set incsearch
 set showmatch
 set hlsearch
-nnoremap <leader><space> :noh<cr>
 set gdefault
 
 set noerrorbells
@@ -37,20 +38,14 @@ set tabstop=4
 set hidden
 
 set laststatus=2
+set showcmd
 
-"====[ Use persistent undo ]=================
+" Search up the directory for tags files
+set tags=./tags;/
 
-if has('persistent_undo')
-    " Save all undo files in a single location (less messy, more risky)...
-    set undodir=$HOME/.vim/.vimundo
+" ======= Key remaps and shortcuts ======
 
-    " Save a lot of back-history...
-    set undolevels=5000
-
-    " Actually switch on persistent undo
-    set undofile
-
-endif
+nnoremap <leader><space> :noh<cr>
 
 " Make BS/DEL work as expected in visual modes (i.e. delete the selected text)...
 vmap <BS> x
@@ -66,12 +61,6 @@ cmap w!! w !sudo tee % >/dev/null
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
-" Airline configuration
-let g:airline_powerline_fonts = 1
-
-" Yankring configuration
-let g:yankring_history_dir = '$HOME/.vim'
-
 " Fix up common shift-key-too-long typos
 if has("user_commands")
     command! -bang -nargs=? -complete=file E e<bang> <args>
@@ -83,14 +72,38 @@ if has("user_commands")
     command! -bang Q q<bang>
     command! -bang QA qa<bang>
     command! -bang Qa qa<bang>
+    command! -bang Bn bn<bang>
+    command! -bang Bp bp<bang>
+    command! -bang Bw bw<bang>
 endif
 
-" use normal regex in searchs
+" Up and down are more logical with g..
+nnoremap <silent> k gk
+nnoremap <silent> j gj
+nnoremap <silent> <Up> gk
+nnoremap <silent> <Down> gj
+inoremap <silent> <Up> <Esc>gk
+inoremap <silent> <Down> <Esc>gj
+
+" use normal regex in searches
 " nnoremap / /\v
 " vnoremap / /\v
 
-" Search up the directory for tags files
-set tags=./tags;/
+" ====== Macros and special settings ======
+
+"====[ Use persistent undo ]=================
+
+if has('persistent_undo')
+    " Save all undo files in a single location (less messy, more risky)...
+    set undodir=$HOME/.vim/.vimundo
+
+    " Save a lot of back-history...
+    set undolevels=5000
+
+    " Actually switch on persistent undo
+    set undofile
+
+endif
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
@@ -99,8 +112,6 @@ set tags=./tags;/
 " Super useful! From an idea by Michael Naumann
 vnoremap <silent> * :call VisualSelection('f')<CR>
 vnoremap <silent> # :call VisualSelection('b')<CR>
-
-autocmd vimenter * if !argc() | NERDTree | endif
 
 function! VisualSelection(direction) range
     let l:saved_reg = @"
@@ -140,3 +151,30 @@ endfunction
 autocmd BufReadPost *  if line("'\"") > 1 && line("'\"") <= line("$")
                    \|     exe "normal! g`\""
                    \|  endif
+
+" Open URL in line in browser (Mac only)
+function! HandleURI()
+  let s:uri = matchstr(getline("."), '[a-z]*:\/\/[^ >,;:]*')
+  echo s:uri
+  if s:uri != ""
+	  exec "!open \"" . s:uri . "\""
+  else
+	  echo "No URI found in line."
+  endif
+endfunction
+map <Leader>w :call HandleURI()<CR>
+
+" ====== Plugin settings ======
+
+"==== Markdown
+let g:vim_markdown_folding_disabled=1
+
+" Airline configuration
+let g:airline_powerline_fonts = 1
+
+" Yankring configuration
+let g:yankring_history_dir = '$HOME/.vim'
+
+" NERDTree
+autocmd vimenter * if !argc() | NERDTree | endif
+
