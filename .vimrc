@@ -180,3 +180,14 @@ let g:yankring_history_dir = '$HOME/.vim'
 " NERDTree
 autocmd vimenter * if !argc() | NERDTree | endif
 
+" gitgutter
+let updatetime = 1000
+highlight SignColumn guibg=black
+highlight GitGutterAdd guibg=black
+highlight GitGutterChange guibg=black
+highlight GitGutterDelete guibg=black
+highlight GitGutterChangeDelete guibg=black
+highlight GitGutterAdd guifg=green
+highlight GitGutterChange guifg=yellow
+highlight GitGutterDelete guifg=red
+highlight GitGutterChangeDelete guifg=orange
