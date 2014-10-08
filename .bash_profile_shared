@@ -13,3 +13,6 @@ GIT_PS1_SHOWDIRTYSTATE="yes"
 source ~/.git-prompt.sh
 
 export PROMPT_COMMAND='__git_ps1 "\[\e[32;1m\]\w\[\e[0m\]" "> ";'
+
+# Ignore binary files, color, ignore git directories by default when recursing
+export GREP_OPTIONS="-I --color --exclude-dir=\.git --exclude=tags"

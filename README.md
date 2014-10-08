@@ -10,5 +10,7 @@ There is a set of VIM plugins available here: https://github.com/webOS101/vimplu
 Basically:
 
     sh .osx
-    cp .bash_profile .gvimrc .inputrc .git-prompt.sh ~
+    cp .gvimrc .inputrc .git-prompt.sh ~
     ln -s /Users/yourname/.../dotfiles/.vimrc ~/.vimrc
+	ln -s /Users/yourname/.../dotfiles/.bash_profile_shared ~/.bash_profile_shared
+    echo "source ~/.bash_profile_shared" >> ~/.bash_profile
