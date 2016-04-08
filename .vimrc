@@ -34,6 +34,9 @@ endif
 
 let mapleader = ","
 
+" ctrlp
+let g:ctrlp_map = 'π'
+
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
 
@@ -120,6 +123,9 @@ nnoremap <silent> <Up> gk
 nnoremap <silent> <Down> gj
 inoremap <silent> <Up> <Esc>gk
 inoremap <silent> <Down> <Esc>gj
+
+" Close buffer in split without closing split
+nmap <leader>d :b#<bar>bd#<bar>b<CR>
 
 " use normal regex in searches
 " nnoremap / /\v
@@ -214,6 +220,20 @@ let g:yankring_history_dir = '$HOME/.vim'
 " NERDTree
 autocmd vimenter * if !argc() | NERDTree | endif
 
+" NERDTress File highlighting
+function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+ exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+ exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+endfunction
+
+call NERDTreeHighlightFile('js', 'Red', 'none', 'SkyBlue', '#333333')
+call NERDTreeHighlightFile('json', 'blue', 'none', 'salmon', '#333333')
+call NERDTreeHighlightFile('css', 'LightGreen', 'none', 'palegreen', '#333333')
+call NERDTreeHighlightFile('less', 'LightGreen', 'none', 'palegreen', '#333333')
+call NERDTreeHighlightFile('html', 'yellow', 'none', 'khaki', '#333333')
+call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#333333')
+call NERDTreeHighlightFile('txt', 'yellow', 'none', 'yellow', '#333333')
+
 " gitgutter
 let updatetime = 1000
 highlight SignColumn guibg=black
@@ -225,3 +245,4 @@ highlight GitGutterAdd guifg=green
 highlight GitGutterChange guifg=yellow
 highlight GitGutterDelete guifg=red
 highlight GitGutterChangeDelete guifg=orange
+
