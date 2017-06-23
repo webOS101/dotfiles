@@ -24,8 +24,8 @@ if has("win16") || has("win32") || has("win64")
   " when on windows machines
   let &rtp=substitute(&rtp,"[/]","\\","g")
 
-  "On windows, if called from cygwin or msys, the shell needs to be changed 
-  "to cmd.exe to work with certain plugins that expect cmd.exe on windows versions   
+  "On windows, if called from cygwin or msys, the shell needs to be changed
+  "to cmd.exe to work with certain plugins that expect cmd.exe on windows versions
   "of vim.
   if &shell=~#'bash$'
     set shell=$COMSPEC " sets shell to correct path for cmd.exe
@@ -46,8 +46,7 @@ set encoding=utf-8 nobomb
 set list
 set listchars=tab:\|\ ,eol:¬,trail:·
 set history=700
-filetype plugin on
-filetype indent on
+filetype plugin indent on
 
 set so=2
 
@@ -127,6 +126,16 @@ inoremap <silent> <Down> <Esc>gj
 " Close buffer in split without closing split
 nmap <leader>d :b#<bar>bd#<bar>b<CR>
 
+" Navigate splits with ctrl-arrows
+nnoremap <silent> <C-Right> <c-w>l
+nnoremap <silent> <C-Left> <c-w>h
+nnoremap <silent> <C-Up> <c-w>k
+nnoremap <silent> <C-Down> <c-w>j
+nnoremap <silent> <C-S-Right> <c-w>L
+nnoremap <silent> <C-S-Left> <c-w>H
+nnoremap <silent> <C-S-Up> <c-w>K
+nnoremap <silent> <C-S-Down> <c-w>J
+
 " use normal regex in searches
 " nnoremap / /\v
 " vnoremap / /\v
@@ -180,12 +189,12 @@ vmap <expr> > ShiftAndKeepVisualSelection(">")
 vmap <expr> < ShiftAndKeepVisualSelection("<")
 
 function! ShiftAndKeepVisualSelection(cmd)
-	set nosmartindent
-	if mode() =~ '[Vv]'
-		return a:cmd . ":set smartindent\<CR>gv"
-	else
-		return a:cmd . ":set smartindent\<CR>"
-	endif
+  set nosmartindent
+  if mode() =~ '[Vv]'
+    return a:cmd . ":set smartindent\<CR>gv"
+  else
+    return a:cmd . ":set smartindent\<CR>"
+  endif
 endfunction
 
 "====[ Goto last location in non-empty files ]=======
@@ -199,9 +208,9 @@ function! HandleURI()
   let s:uri = matchstr(getline("."), '[a-z]*:\/\/[^ >,;:]*')
   echo s:uri
   if s:uri != ""
-	  exec "!open \"" . s:uri . "\""
+    exec "!open \"" . s:uri . "\""
   else
-	  echo "No URI found in line."
+    echo "No URI found in line."
   endif
 endfunction
 map <Leader>w :call HandleURI()<CR>
@@ -213,6 +222,7 @@ let g:vim_markdown_folding_disabled=1
 
 " Airline configuration
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#whitespace#enabled = 0
 
 " Yankring configuration
 let g:yankring_history_dir = '$HOME/.vim'
@@ -246,3 +256,19 @@ highlight GitGutterChange guifg=yellow
 highlight GitGutterDelete guifg=red
 highlight GitGutterChangeDelete guifg=orange
 
+" syntastic
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_mode_map = {
+        \ "mode": "active",
+        \ "active_filetypes": ["javascript"]}
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_style_error_symbol = '✠'
+let g:syntastic_warning_symbol = '∆'
+let g:syntastic_style_warning_symbol = '≈'
+
+" vim-jsx
+let g:jsx_ext_required = 0
