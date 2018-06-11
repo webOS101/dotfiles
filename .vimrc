@@ -35,6 +35,7 @@ endif
 let mapleader = ","
 
 " ctrlp
+" Map ctrl-p to alt-p
 let g:ctrlp_map = 'π'
 
 runtime bundle/vim-pathogen/autoload/pathogen.vim
@@ -141,6 +142,33 @@ nnoremap <silent> <C-S-Down> <c-w>J
 " vnoremap / /\v
 
 " ====== Macros and special settings ======
+
+" Save current view settings on a per-window, per-buffer basis.
+function! AutoSaveWinView()
+    if !exists("w:SavedBufView")
+        let w:SavedBufView = {}
+    endif
+    let w:SavedBufView[bufnr("%")] = winsaveview()
+endfunction
+
+" Restore current view settings.
+function! AutoRestoreWinView()
+    let buf = bufnr("%")
+    if exists("w:SavedBufView") && has_key(w:SavedBufView, buf)
+        let v = winsaveview()
+        let atStartOfFile = v.lnum == 1 && v.col == 0
+        if atStartOfFile && !&diff
+            call winrestview(w:SavedBufView[buf])
+        endif
+        unlet w:SavedBufView[buf]
+    endif
+endfunction
+
+" When switching buffers, preserve window view.
+if v:version >= 700
+    autocmd BufLeave * call AutoSaveWinView()
+    autocmd BufEnter * call AutoRestoreWinView()
+endif
 
 "====[ Use persistent undo ]=================
 
@@ -258,6 +286,8 @@ highlight GitGutterChangeDelete guifg=orange
 
 " syntastic
 let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_css_checkers = ['stylelint']
+let g:syntastic_less_checkers = ['css/stylelint']
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
